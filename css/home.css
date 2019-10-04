@@ -1,0 +1,72 @@
+<?php
+
+$data = json_decode(file_get_contents("users.json"), true);
+// Start session
+session_start();
+if (isset($_SESSION['Name'])) {
+	$user['Name'] = $_SESSION['Name'];
+} else {
+	header('location: index.php');
+	exit();
+}
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+	<link rel="stylesheet" href="css/home.css">
+	<link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+	<div class="wrap">
+		<div class="container-content">
+			<h1>Networth Calculator</h1>
+			<p class="wl-note">Welcome, <?php echo $user['Name']; ?></p>
+			<section class="form-container">
+				<h2>Declear your asset</h2>
+
+				<div class="input-container">
+					<!-- <span>Enter your Assets in value</span> -->
+					<input type="text" class="input" id="assets" name="assets" placeholder="Asset value">
+					<!-- <span>Enter your Liquid asset in value</span> -->
+					<input type="text" class="input" id="cash" name="liquid-asset" placeholder="Cash value">
+					<!-- <span>Enter your Liabilities in value</span> -->
+					<input type="text" class="input" id="liability" name="liabilities" placeholder="liability value">
+					<button style="width: 100%" type="submit" id="submit-asset" class="btn-sign-in" onclick="calc()">Calculate Net Worth</button>
+				</div>
+
+				<div class="display-result">
+					<h3>Your current Net worth: <span id="result"></span>
+					</h3>
+				</div>
+
+				<?php
+
+				/* Logout button */
+				if (isset($_POST['logout'])) {
+					session_destroy();
+					session_unset();
+
+					/* Redirect to login page */
+					header('location: index.php');
+				}
+
+				?>
+
+				<form action="home.php" method="post">
+					<button style="width: 100%" type="submit" class="btn-sign-in" name="logout">Logout</button>
+				</form>
+			</section>
+		</div>
+	</div>
+
+	<script src="app.js"></script>
+</body>
+
+</html>
